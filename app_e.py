@@ -16,13 +16,13 @@ def load_resources():
     gdown.download(model_url, model_output, quiet=False)
     model = load_model(model_output)  # Load the model file
 
-    # Google Drive URL to the scaler (assuming you have the link)
+    # Google Drive URL to the scaler
     scaler_url = 'https://drive.google.com/uc?id=1-n1VUFuwSPakfzx2SRogr5NhN4ZBzwW0'
     scaler_output = 'scaler.joblib'
     gdown.download(scaler_url, scaler_output, quiet=False)
     scaler = joblib.load(scaler_output)  # Load the scaler file
 
-    return model, scaler
+    return model, scaler  # Ensure this line is correctly indented
 
 model, scaler = load_resources()
 
