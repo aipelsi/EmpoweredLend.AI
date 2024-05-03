@@ -19,7 +19,7 @@ import gdown
 def load_resources():
     # Download and load the model
     model_path = 'model.h5'
-    gdown.download(model_url, model_path, quiet=False)
+    gdown.download(model_path, quiet=False)
     model = load_model(model_path)
 
     # Load the scaler (assuming it's locally available or adjust if it's online)
