@@ -15,6 +15,11 @@ import joblib
 import gdown
 import requests
 from io import BytesIO
+from tensorflow.keras.layers import TFSMLayer
+
+# Assuming you have the model saved in a TensorFlow SavedModel format
+model = TFSMLayer(BytesIO(response.content), call_endpoint='serving_default')
+
 
 # Function to download and load resources
 @st.cache(allow_output_mutation=True)
@@ -22,9 +27,15 @@ def load_resources():
     # GitHub raw URL to the model
     model_url = 'https://github.com/aipelsi/EmpoweredLend.AI/raw/main/model.h5'
     response = requests.get(model_url)
-    model = load_model(BytesIO(response.content))
-
-    # GitHub raw URL to the scaler
+    try:
+        # Try to load as an H5 file
+        model = load_model(BytesIO(response.content))
+    except ValueError:
+        # If it fails, try loading as a TensorFlow SavedModel
+        from tensorflow.keras.layers import TFSMLayer
+        model = TFSMLayer(BytesIO(response.content), call_endpoint='serving_default')
+    
+    # Load the scaler
     scaler_url = 'https://github.com/aipelsi/EmpoweredLend.AI/raw/main/scaler.joblib'
     response = requests.get(scaler_url)
     scaler = joblib.load(BytesIO(response.content))
