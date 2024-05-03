@@ -1,11 +1,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import requests
-from io import BytesIO
+import gdown
 from tensorflow.keras.models import load_model
 import joblib
-import gdown
 
 # Function to download and load resources
 @st.cache(allow_output_mutation=True)
@@ -21,11 +19,6 @@ def load_resources():
     scaler_output = 'scaler.joblib'
     gdown.download(scaler_url, scaler_output, quiet=False)
     scaler = joblib.load(scaler_output)  # Load the scaler file
-
-    return model, scaler  # Ensure this line is correctly indented
-
-model, scaler = load_resources()
-
 
     return model, scaler
 
@@ -79,4 +72,3 @@ with st.form("my_form"):
             st.success('The loan is likely to be paid back.')
         else:
             st.error('There is a high risk the loan will not be paid back.')
-
