@@ -1,0 +1,7 @@
+streamlit
+pandas
+numpy
+tensorflow>=2.9
+joblib
+gdown
+scikit-learn
