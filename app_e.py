@@ -5,19 +5,27 @@ import requests
 from io import BytesIO
 from tensorflow.keras.models import load_model
 import joblib
+import gdown
 
 # Function to download and load resources
 @st.cache(allow_output_mutation=True)
 def load_resources():
-    # GitHub raw URL to the model
-    model_url = 'https://github.com/aipelsi/EmpoweredLend.AI/raw/main/model.h5'
-    response = requests.get(model_url)
-    model = load_model(BytesIO(response.content))  # Assuming it's an H5 file
+    # Google Drive URL to the model
+    model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
+    model_output = 'model.h5'
+    gdown.download(model_url, model_output, quiet=False)
+    model = load_model(model_output)  # Load the model file
 
-    # GitHub raw URL to the scaler
-    scaler_url = 'https://github.com/aipelsi/EmpoweredLend.AI/raw/main/scaler.joblib'
-    response = requests.get(scaler_url)
-    scaler = joblib.load(BytesIO(response.content))
+    # Google Drive URL to the scaler (assuming you have the link)
+    scaler_url = 'https://drive.google.com/uc?id=1-n1VUFuwSPakfzx2SRogr5NhN4ZBzwW0'
+    scaler_output = 'scaler.joblib'
+    gdown.download(scaler_url, scaler_output, quiet=False)
+    scaler = joblib.load(scaler_output)  # Load the scaler file
+
+    return model, scaler
+
+model, scaler = load_resources()
+
 
     return model, scaler
 
