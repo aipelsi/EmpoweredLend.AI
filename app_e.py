@@ -72,6 +72,3 @@ with st.form("my_form"):
         else:
             st.error('There is a high risk the loan will not be paid back.')
 
-            st.success('The loan is likely to be paid back.')
-        else:
-            st.error('There is a high risk the loan will not be paid back.')
