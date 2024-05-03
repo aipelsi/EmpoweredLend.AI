@@ -13,6 +13,8 @@ import numpy as np
 from tensorflow.keras.models import load_model
 import joblib
 import gdown
+import requests
+from io import BytesIO
 
 # Function to download and load resources
 @st.cache(allow_output_mutation=True)
