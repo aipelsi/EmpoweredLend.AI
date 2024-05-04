@@ -78,10 +78,10 @@ with st.form("loan_form"):
             prediction = model.predict(input_scaled)
             result = prediction[0][0]
 
-            if result > 0.7:
+            if result > 0.6:
                 st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
             else:
-                st.Success('There is a high risk the loan will not be paid back.')
+                st.success('We can't approve your request at the moment. But we will reach out to help you navigate other options.')
         except Exception as e:
             st.error("An error occurred during the prediction process. Please try again.")
             st.error("Error details: " + str(e))
