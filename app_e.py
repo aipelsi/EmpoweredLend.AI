@@ -33,27 +33,29 @@ def convert_image_to_base64(image_path):
 
 image_base64 = convert_image_to_base64("photo.png")  # Adjust the path as necessary
 
+# Custom CSS to style the app
+st.markdown("""
+    <style>
+    body {
+        color: white;             # Set text color to white
+        background-color: black;  # Set background to black
+    }
+    .css-1v3fvcr {
+        background-color: black;  # Ensuring the main container also has a black background
+    }
+    .css-1d391kg {
+        color: white;             # Ensuring text color inside form is white
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Displaying the app's title and logo
 st.markdown(f"""
     <div style="text-align: center;">
         <img src="{image_base64}" alt="Logo" style="height: 80px;">
-        <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
+        <h1 style="color: white; text-align: center;">EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
-    """, unsafe_allow_html=True)
-
-# Custom CSS to style the app
-st.markdown("""
-    <style>
-    .reportview-container {
-        background-color: black;  # Set background to black
-        color: white;             # Set text color to white
-    }
-    .big-font {
-        font-size:28px !important;
-        font-weight: bold;
-    }
-    </style>
     """, unsafe_allow_html=True)
 
 # Collecting user input
@@ -85,3 +87,4 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
+
