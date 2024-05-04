@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 import joblib
 import numpy as np
 
-# Function to download and load resources using the appropriate Streamlit caching command
+# Function to download and load resources
 @st.experimental_singleton
 def load_resources():
     model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
@@ -27,8 +27,7 @@ model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate'
                  'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V',
                  'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
-
-# Direct link to your logo image, replace 'YourImageFileID' with the actual ID of the file
+# Direct link to your logo image
 image_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"
 
 st.markdown(f"""
@@ -39,15 +38,6 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
-st.markdown('<p class="big-font">Loan Approval Check</p>', unsafe_allow_html=True)
-
-with st.form("loan_form"):
-    st.write("## Personal Information")
-    first_name = st.text_input("First Name")
-    last_name = st.text_input("Last Name")
-    age = st.number_input("Age", min_value=18, max_value=100, value=30, step=1)
-    business_purpose = st.text_area("Business Purpose", height=100)
-
 with st.form("loan_form"):
     st.write("## Personal Information")
     first_name = st.text_input("First Name")
@@ -56,18 +46,14 @@ with st.form("loan_form"):
     business_purpose = st.text_area("Business Purpose", height=100)
 
     st.write("## Loan Details")
-    # Numerical Inputs
     gross_approval = st.number_input('Gross Approval', min_value=0, value=50000)
     sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval if Applicable', min_value=0, value=25000)
     initial_interest_rate = st.number_input('Initial Interest Rate Desired', min_value=0.0, max_value=100.0, value=5.0, format="%.2f")
-    term_in_months = st.number_input('Term in Months Desiered', min_value=0, value=120)
+    term_in_months = st.number_input('Term in Months Desired', min_value=0, value=120)
     jobs_supported = st.number_input('Jobs Supported', min_value=0, value=1)
-    
-    # Categorical Inputs (one-hot encoded)
     fixed_or_variable_interest = st.selectbox('Interest Type', ['Variable', 'Fixed'])
     business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
     business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
-
 
     submitted = st.form_submit_button("Predict")
     if submitted:
@@ -77,7 +63,6 @@ with st.form("loan_form"):
                                     1 if fixed_or_variable_interest == 'Fixed' else 0,
                                     1 if business_type_individual == 'Yes' else 0,
                                     1 if business_type_partnership == 'Yes' else 0]])
-                                    
 
             input_df = pd.DataFrame(input_data, columns=model_columns)
             input_scaled = scaler.transform(input_df)
@@ -87,7 +72,8 @@ with st.form("loan_form"):
             if result > 0.99:
                 st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
             else:
-                st.error('We can not approve your request at the moment. But we will reach out to help you navigate other options.')
+                st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
         except Exception as e:
             st.error("An error occurred during the prediction process. Please try again.")
             st.error("Error details: " + str(e))
+
