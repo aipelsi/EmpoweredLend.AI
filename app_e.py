@@ -55,7 +55,7 @@ with st.form("loan_form"):
     business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
     business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
 
-    submitted = st.form_submit_button("Predict")
+    submitted = st.form_submit_button("Submit")
     if submitted:
         try:
             input_data = np.array([[gross_approval, sba_guaranteed_approval, initial_interest_rate,
