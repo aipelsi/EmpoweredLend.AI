@@ -25,11 +25,12 @@ model, scaler = load_resources()
 # Define model columns
 model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate', 'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V', 'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
-# Setup Streamlit interface
-st.markdown("""
+logo_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"  # Adjusted for direct access
+
+st.markdown(f"""
     <div style="text-align: center;">
-        <img src="https://drive.google.com/file/d/1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF/view?usp=sharing" alt="Logo" style="height: 100px;">
-        <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
+        <img src="{logo_url}" alt="EmpowerLend.AI Logo" style="height: 80px; margin-top: 10px;">
+        <h1>EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
     """, unsafe_allow_html=True)
@@ -58,7 +59,7 @@ with st.form("loan_form"):
         input_scaled = scaler.transform(input_df)
         prediction = model.predict(input_scaled)
         result = prediction[0][0]
-        if result > 0.5:
+        if result > 0.7:
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
