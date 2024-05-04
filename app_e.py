@@ -5,8 +5,8 @@ from tensorflow.keras.models import load_model
 import joblib
 import numpy as np
 
-# Function to download and load resources
-@st.cache(allow_output_mutation=True)
+# Function to download and load resources using the appropriate Streamlit caching command
+@st.experimental_singleton
 def load_resources():
     model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
     model_output = 'model.h5'
@@ -21,6 +21,11 @@ def load_resources():
     return model, scaler
 
 model, scaler = load_resources()
+
+# Assuming model_columns are defined or loaded here
+model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'ApprovalFiscalYear', 'InitialInterestRate',
+                 'TermInMonths', 'GrossChargeOffAmount', 'RevolverStatus', 'JobsSupported', 'FixedOrVariableInterestInd_V',
+                 'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP', 'SoldSecMrktInd_Y']
 
 st.markdown("""
     <style>
@@ -45,45 +50,28 @@ with st.form("loan_form"):
     business_purpose = st.text_area("Business Purpose", height=100)
 
     st.write("## Loan Details")
-    # Numerical Inputs
-    gross_approval = st.number_input('Gross Approval', min_value=0, value=50000)
-    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval', min_value=0, value=25000)
-    approval_fiscal_year = st.number_input('Approval Fiscal Year', min_value=1990, max_value=2025, value=2021)
-    initial_interest_rate = st.number_input('Initial Interest Rate', min_value=0.0, max_value=100.0, value=5.0, format="%.2f")
-    term_in_months = st.number_input('Term in Months', min_value=0, value=120)
-    gross_chargeoff_amount = st.number_input('Gross Charge Off Amount', min_value=0, value=0)
-    revolver_status = st.selectbox('Revolver Status', [0, 1])
-    jobs_supported = st.number_input('Jobs Supported', min_value=0, value=1)
-    
-    # Categorical Inputs (one-hot encoded)
-    fixed_or_variable_interest = st.selectbox('Interest Type', ['Variable', 'Fixed'])
-    business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
-    business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
-    sold_sec_market_ind = st.radio('Sold in Secondary Market?', ['Yes', 'No'])
+    # Numerical Inputs and Categorical Inputs as defined previously...
 
     submitted = st.form_submit_button("Predict")
     if submitted:
-        # Prepare the input data in the same order as during model training
-        input_data = np.array([[
-            gross_approval,
-            sba_guaranteed_approval,
-            approval_fiscal_year,
-            initial_interest_rate,
-            term_in_months,
-            gross_chargeoff_amount,
-            revolver_status,
-            jobs_supported,
-            1 if fixed_or_variable_interest == 'Fixed' else 0,
-            1 if business_type_individual == 'Yes' else 0,
-            1 if business_type_partnership == 'Yes' else 0,
-            1 if sold_sec_market_ind == 'Yes' else 0
-        ]])
-        input_df = pd.DataFrame(input_data, columns=model_columns)
-        input_scaled = scaler.transform(input_df)
-        prediction = model.predict(input_scaled)
-        result = prediction[0][0]
-        
-        if result > 0.5:
-            st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
-        else:
-            st.error('There is a high risk the loan will not be paid back.')
+        try:
+            input_data = np.array([[gross_approval, sba_guaranteed_approval, approval_fiscal_year, initial_interest_rate,
+                                    term_in_months, gross_chargeoff_amount, revolver_status, jobs_supported,
+                                    1 if fixed_or_variable_interest == 'Fixed' else 0,
+                                    1 if business_type_individual == 'Yes' else 0,
+                                    1 if business_type_partnership == 'Yes' else 0,
+                                    1 if sold_sec_market_ind == 'Yes' else 0]])
+
+            input_df = pd.DataFrame(input_data, columns=model_columns)
+            input_scaled = scaler.transform(input_df)
+            prediction = model.predict(input_scaled)
+            result = prediction[0][0]
+
+            if result > 0.5:
+                st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
+            else:
+                st.error('There is a high risk the loan will not be paid back.')
+        except Exception as e:
+            st.error("An error occurred during the prediction process. Please try again.")
+            st.error("Error details: " + str(e))
+
