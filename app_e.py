@@ -85,4 +85,3 @@ with st.form("loan_form"):
         except Exception as e:
             st.error("An error occurred during the prediction process. Please try again.")
             st.error("Error details: " + str(e))
-
