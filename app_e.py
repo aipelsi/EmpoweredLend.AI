@@ -58,7 +58,7 @@ with st.form("loan_form"):
         input_scaled = scaler.transform(input_df)
         prediction = model.predict(input_scaled)
         result = prediction[0][0]
-        if result > 0.99:
+        if result > 0.5:
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
