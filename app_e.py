@@ -81,7 +81,7 @@ with st.form("loan_form"):
             if result > 0.6:
                 st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
             else:
-                st.success('We can't approve your request at the moment. But we will reach out to help you navigate other options.')
+                st.error('We can't approve your request at the moment. But we will reach out to help you navigate other options.')
         except Exception as e:
             st.error("An error occurred during the prediction process. Please try again.")
             st.error("Error details: " + str(e))
