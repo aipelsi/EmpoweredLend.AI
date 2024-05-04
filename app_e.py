@@ -42,6 +42,20 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
+# Custom CSS to style the app
+st.markdown("""
+    <style>
+    .reportview-container {
+        background-color: black;  # Set background to black
+        color: white;             # Set text color to white
+    }
+    .big-font {
+        font-size:28px !important;
+        font-weight: bold;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 # Collecting user input
 with st.form("loan_form"):
     st.write("## Personal Information")
@@ -71,6 +85,3 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
-
-
-
