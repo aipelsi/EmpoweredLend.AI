@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Assessment</title>
     <style>
-        /* Set the full viewport height for the body and html */
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Hide overflow to avoid scrollbars if iframe is exact fit */
+        body {
+            background-color: black; /* Sets the background color of the body to black */
+            color: white; /* Sets the text color to white for contrast */
+            margin: 0; /* Removes default margin */
+            padding: 0; /* Removes default padding */
+            height: 100%; /* Full height */
+            display: flex; /* Enables flexbox */
+            justify-content: center; /* Centers content horizontally */
+            align-items: center; /* Centers content vertically */
         }
         iframe {
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            border: none; /* No border for a seamless look */
+            width: 600px; /* Width of the iframe */
+            height: 600px; /* Height of the iframe */
+            border: none; /* Removes the border around the iframe */
         }
     </style>
 </head>
 <body>
-    <!-- Embedding the Streamlit app in an iframe -->
-<iframe src="https://empoweredlendai-7m9bknhq88tejzpjwxkhy2.streamlit.app/" allowfullscreen></iframe>
-    
+
+<iframe src="https://empoweredlendai-7m9bknhq88tejzpjwxkhy2.streamlit.app/">
+  <p>Your browser does not support iframes.</p>
+</iframe>
+
 </body>
 </html>
+
 
