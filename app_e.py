@@ -27,20 +27,26 @@ model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate'
                  'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V',
                  'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
-st.markdown("""
-    <style>
-    .big-font {
-        font-size:28px !important;
-        font-weight: bold;
-    }
-    .reportview-container {
-        background: url("https://source.unsplash.com/weekly?water");
-        background-size: cover;
-    }
-    </style>
+
+# Direct link to your logo image, replace 'YourImageFileID' with the actual ID of the file
+image_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"
+
+st.markdown(f"""
+    <div style="text-align: center;">
+        <img src="{image_url}" alt="Logo" style="height: 100px;">
+        <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
+        <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
+    </div>
     """, unsafe_allow_html=True)
 
-st.markdown('<p class="big-font">Loan Repayment Prediction App</p>', unsafe_allow_html=True)
+st.markdown('<p class="big-font">Loan Approval Check</p>', unsafe_allow_html=True)
+
+with st.form("loan_form"):
+    st.write("## Personal Information")
+    first_name = st.text_input("First Name")
+    last_name = st.text_input("Last Name")
+    age = st.number_input("Age", min_value=18, max_value=100, value=30, step=1)
+    business_purpose = st.text_area("Business Purpose", height=100)
 
 with st.form("loan_form"):
     st.write("## Personal Information")
@@ -78,7 +84,7 @@ with st.form("loan_form"):
             prediction = model.predict(input_scaled)
             result = prediction[0][0]
 
-            if result > 0.7:
+            if result > 0.99:
                 st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
             else:
                 st.error('We can not approve your request at the moment. But we will reach out to help you navigate other options.')
