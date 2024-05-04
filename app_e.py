@@ -47,7 +47,7 @@ with st.form("loan_form"):
 
     st.write("## Loan Details")
     gross_approval = st.number_input('Amount Desired', min_value=0, max_value=100000)
-    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval if Applicable', min_value=0, Max_value=150000)
+    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval if Applicable', min_value=0, max_value=150000)
     initial_interest_rate = st.number_input('Initial Interest Rate Desired', min_value=0.0, max_value=20, value=5.0, format="%.2f")
     term_in_months = st.number_input('Term in Months Desired', min_value=0, max_value=120)
     jobs_supported = st.number_input('Jobs Supported', min_value=0, max_value=1)
