@@ -1,11 +1,12 @@
+# Import necessary libraries
 import streamlit as st
 import pandas as pd
+import numpy as np
 import gdown
 from tensorflow.keras.models import load_model
 import joblib
-import numpy as np
 
-# Function to download and load resources
+# Define function to load resources
 @st.experimental_singleton
 def load_resources():
     model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
@@ -21,12 +22,13 @@ def load_resources():
 
 model, scaler = load_resources()
 
-# Direct link to your logo image
-image_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"
+# Define model columns
+model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate', 'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V', 'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
-st.markdown(f"""
+# Setup Streamlit interface
+st.markdown("""
     <div style="text-align: center;">
-        <img src="{image_url}" alt="Logo" style="height: 100px;">
+        <img src="https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF" alt="Logo" style="height: 100px;">
         <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
@@ -40,35 +42,25 @@ with st.form("loan_form"):
     business_purpose = st.text_area("Business Purpose", height=100)
 
     st.write("## Loan Details")
-    gross_approval = st.number_input('Amount Desired', min_value=0, max_value=100000)
-    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval if Applicable', min_value=0, max_value=150000)
-    initial_interest_rate = st.number_input('Initial Interest Rate Desired', min_value=0.0, max_value=20, value=5.0, format="%.2f")
-    term_in_months = st.number_input('Term in Months Desired', min_value=0, max_value=120)
-    jobs_supported = st.number_input('Jobs Supported', min_value=0, max_value=1)
+    gross_approval = st.number_input('Amount Desired', min_value=0.0, max_value=100000.0, value=50000.0, format="%.2f")
+    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval if Applicable', min_value=0.0, max_value=150000.0, value=25000.0, format="%.2f")
+    initial_interest_rate = st.number_input('Initial Interest Rate Desired', min_value=0.0, max_value=20.0, value=5.0, format="%.2f")
+    term_in_months = st.number_input('Term in Months Desired', min_value=0, max_value=120, value=120)
+    jobs_supported = st.number_input('Jobs Supported', min_value=0, max_value=1000, value=1)
     fixed_or_variable_interest = st.selectbox('Interest Type', ['Variable', 'Fixed'])
     business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
     business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
 
     submitted = st.form_submit_button("Submit")
     if submitted:
-        try:
-            input_data = np.array([[gross_approval, sba_guaranteed_approval, initial_interest_rate,
-                                    term_in_months, jobs_supported,
-                                    1 if fixed_or_variable_interest == 'Fixed' else 0,
-                                    1 if business_type_individual == 'Yes' else 0,
-                                    1 if business_type_partnership == 'Yes' else 0]])
-
-            input_df = pd.DataFrame(input_data, columns=model_columns)
-            input_scaled = scaler.transform(input_df)
-            prediction = model.predict(input_scaled)
-            result = prediction[0][0]
-
-            if result > 0.99:
-                st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
-            else:
-                st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
-        except Exception as e:
-            st.error("An error occurred during the prediction process. Please try again.")
-            st.error("Error details: " + str(e))
+        input_data = np.array([[gross_approval, sba_guaranteed_approval, initial_interest_rate, term_in_months, jobs_supported, 1 if fixed_or_variable_interest == 'Fixed' else 0, 1 if business_type_individual == 'Yes' else 0, 1 if business_type_partnership == 'Yes' else 0]])
+        input_df = pd.DataFrame(input_data, columns=model_columns)
+        input_scaled = scaler.transform(input_df)
+        prediction = model.predict(input_scaled)
+        result = prediction[0][0]
+        if result > 0.99:
+            st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
+        else:
+            st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
 
 
