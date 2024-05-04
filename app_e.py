@@ -66,7 +66,7 @@ with st.form("loan_form"):
     submitted = st.form_submit_button("Predict")
     if submitted:
         try:
-            input_data = np.array([[sba_guaranteed_approval, initial_interest_rate,
+            input_data = np.array([[gross_approval, sba_guaranteed_approval, initial_interest_rate,
                                     term_in_months, jobs_supported,
                                     1 if fixed_or_variable_interest == 'Fixed' else 0,
                                     1 if business_type_individual == 'Yes' else 0,
