@@ -5,6 +5,7 @@ import numpy as np
 import gdown
 from tensorflow.keras.models import load_model
 import joblib
+import base64
 
 # Define function to load resources
 @st.experimental_singleton
@@ -25,16 +26,23 @@ model, scaler = load_resources()
 # Define model columns
 model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate', 'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V', 'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
-logo_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"  # Adjusted for direct access
+def convert_image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+    return f"data:image/png;base64,{encoded_string}"
 
+image_base64 = convert_image_to_base64("photo.png")  # Adjust the path as necessary
+
+# Displaying the app's title and logo
 st.markdown(f"""
     <div style="text-align: center;">
-        <img src="photo.png" alt="EmpowerLend.AI Logo" style="height: 80px; margin-top: 10px;">
-        <h1>EmpowerLend.AI</h1>
+        <img src="{image_base64}" alt="Logo" style="height: 80px;">
+        <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
     """, unsafe_allow_html=True)
 
+# Collecting user input
 with st.form("loan_form"):
     st.write("## Personal Information")
     first_name = st.text_input("First Name")
@@ -63,5 +71,6 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
+
 
 
