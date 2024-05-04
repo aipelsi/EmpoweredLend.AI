@@ -17,15 +17,9 @@ def load_resources():
     scaler_output = 'scaler.joblib'
     gdown.download(scaler_url, scaler_output, quiet=False)
     scaler = joblib.load(scaler_output)
-
     return model, scaler
 
 model, scaler = load_resources()
-
-# Assuming model_columns are defined or loaded here
-model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate',
-                 'TermInMonths', 'JobsSupported', 'FixedOrVariableInterestInd_V',
-                 'BusinessType_INDIVIDUAL', 'BusinessType_PARTNERSHIP']
 
 # Direct link to your logo image
 image_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF"
@@ -76,4 +70,5 @@ with st.form("loan_form"):
         except Exception as e:
             st.error("An error occurred during the prediction process. Please try again.")
             st.error("Error details: " + str(e))
+
 
