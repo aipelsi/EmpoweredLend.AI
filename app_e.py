@@ -50,7 +50,21 @@ with st.form("loan_form"):
     business_purpose = st.text_area("Business Purpose", height=100)
 
     st.write("## Loan Details")
-    # Numerical Inputs and Categorical Inputs as defined previously...
+    # Numerical Inputs
+    gross_approval = st.number_input('Gross Approval', min_value=0, value=50000)
+    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval', min_value=0, value=25000)
+    approval_fiscal_year = st.number_input('Approval Fiscal Year', min_value=1990, max_value=2025, value=2021)
+    initial_interest_rate = st.number_input('Initial Interest Rate', min_value=0.0, max_value=100.0, value=5.0, format="%.2f")
+    term_in_months = st.number_input('Term in Months', min_value=0, value=120)
+    gross_chargeoff_amount = st.number_input('Gross Charge Off Amount', min_value=0, value=0)
+    revolver_status = st.selectbox('Revolver Status', [0, 1])
+    jobs_supported = st.number_input('Jobs Supported', min_value=0, value=1)
+    
+    # Categorical Inputs (one-hot encoded)
+    fixed_or_variable_interest = st.selectbox('Interest Type', ['Variable', 'Fixed'])
+    business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
+    business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
+    sold_sec_market_ind = st.radio('Sold in Secondary Market?', ['Yes', 'No'])
 
     submitted = st.form_submit_button("Predict")
     if submitted:
