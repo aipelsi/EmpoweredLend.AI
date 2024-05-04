@@ -36,16 +36,14 @@ image_base64 = convert_image_to_base64("photo.png")  # Adjust the path as necess
 # Custom CSS to style the app
 st.markdown("""
     <style>
-    body, html {
-        color: white !important;  # Ensures text is white
-        background-color: black !important;  # Ensures background is black
+    body {
+        background-color: black;  # Set the general background to black
     }
-    .stTextInput, .stSelectbox, .stRadio, .stTextArea {
-        background-color: black;  # Input background
-        color: white;  # Input text color
-    }
-    .css-2trqyj {
-        color: white;
+    .reportview-container .main .block-container {
+        background-color: white;  # Set the main content background to white
+        color: black;             # Ensure text is black
+        padding: 2rem;            # Optional: Adds some padding inside the main container
+        border-radius: 10px;      # Optional: Rounds the corners of the main container
     }
     </style>
     """, unsafe_allow_html=True)
@@ -54,7 +52,7 @@ st.markdown("""
 st.markdown(f"""
     <div style="text-align: center;">
         <img src="{image_base64}" alt="Logo" style="height: 80px;">
-        <h1 style="color: white; text-align: center;">EmpowerLend.AI</h1>
+        <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
     """, unsafe_allow_html=True)
@@ -88,5 +86,6 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
+
 
 
