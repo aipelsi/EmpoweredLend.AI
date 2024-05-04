@@ -1,74 +1,89 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import gdown
 from tensorflow.keras.models import load_model
 import joblib
+import numpy as np
 
 # Function to download and load resources
 @st.cache(allow_output_mutation=True)
 def load_resources():
-    # Google Drive URL to the model
     model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
     model_output = 'model.h5'
     gdown.download(model_url, model_output, quiet=False)
-    model = load_model(model_output)  # Load the model file
+    model = load_model(model_output)
 
-    # Google Drive URL to the scaler
     scaler_url = 'https://drive.google.com/uc?id=1-n1VUFuwSPakfzx2SRogr5NhN4ZBzwW0'
     scaler_output = 'scaler.joblib'
     gdown.download(scaler_url, scaler_output, quiet=False)
-    scaler = joblib.load(scaler_output)  # Load the scaler file
+    scaler = joblib.load(scaler_output)
 
     return model, scaler
 
 model, scaler = load_resources()
 
-# Custom CSS to style the app
 st.markdown("""
     <style>
-    .reportview-container {
-        background: url("https://source.unsplash.com/weekly?water");  # Background image
-        background-size: cover;
-    }
     .big-font {
         font-size:28px !important;
         font-weight: bold;
+    }
+    .reportview-container {
+        background: url("https://source.unsplash.com/weekly?water");
+        background-size: cover;
     }
     </style>
     """, unsafe_allow_html=True)
 
 st.markdown('<p class="big-font">Loan Repayment Prediction App</p>', unsafe_allow_html=True)
 
-# Input Section
-with st.form("my_form"):
-    st.write("## Enter Loan Details")
+with st.form("loan_form"):
+    st.write("## Personal Information")
+    first_name = st.text_input("First Name")
+    last_name = st.text_input("Last Name")
+    age = st.number_input("Age", min_value=18, max_value=100, value=30, step=1)
+    business_purpose = st.text_area("Business Purpose", height=100)
+
+    st.write("## Loan Details")
+    # Numerical Inputs
+    gross_approval = st.number_input('Gross Approval', min_value=0, value=50000)
+    sba_guaranteed_approval = st.number_input('SBA Guaranteed Approval', min_value=0, value=25000)
+    approval_fiscal_year = st.number_input('Approval Fiscal Year', min_value=1990, max_value=2025, value=2021)
+    initial_interest_rate = st.number_input('Initial Interest Rate', min_value=0.0, max_value=100.0, value=5.0, format="%.2f")
+    term_in_months = st.number_input('Term in Months', min_value=0, value=120)
+    gross_chargeoff_amount = st.number_input('Gross Charge Off Amount', min_value=0, value=0)
+    revolver_status = st.selectbox('Revolver Status', [0, 1])
+    jobs_supported = st.number_input('Jobs Supported', min_value=0, value=1)
     
-    age = st.number_input("Borrower's Age", min_value=18, max_value=100, value=30, step=1)
-    city = st.text_input("City")
-    for_profit = st.selectbox('For-Profit Status', ['Yes', 'No'])
-    financial_education_needed = st.selectbox('Do you need financial education?', ['Yes', 'No'])
-    gross_approval = st.number_input('Amount Requested', min_value=0, max_value=1000000, value=50000, step=1000)
-    fixed_or_variable = st.selectbox('Fixed or Variable Interest', ['Fixed', 'Variable'])
-    term_in_months = st.number_input('Term in Months', min_value=0, max_value=360, value=120, step=1)
-    business_type = st.selectbox('Business Type', ['Type1', 'Type2', 'Type3'])
-    jobs_supported = st.number_input('Jobs Supported', min_value=0, max_value=1000, value=10, step=1)
+    # Categorical Inputs (one-hot encoded)
+    fixed_or_variable_interest = st.selectbox('Interest Type', ['Variable', 'Fixed'])
+    business_type_individual = st.radio('Is Individual Business?', ['Yes', 'No'])
+    business_type_partnership = st.radio('Is Partnership?', ['Yes', 'No'])
+    sold_sec_market_ind = st.radio('Sold in Secondary Market?', ['Yes', 'No'])
 
     submitted = st.form_submit_button("Predict")
     if submitted:
-        input_data = {
-            'GrossApproval': [gross_approval],
-            'FixedOrVariableInterestInd': [1 if fixed_or_variable == 'Fixed' else 0],
-            'TermInMonths': [term_in_months],
-            'BusinessType_Type1': [1 if business_type == 'Type1' else 0],
-            'BusinessType_Type2': [1 if business_type == 'Type2' else 0],
-            'BusinessType_Type3': [1 if business_type == 'Type3' else 0],
-            'JobsSupported': [jobs_supported]
-        }
-        processed_data = scaler.transform(pd.DataFrame(input_data))
-        prediction = model.predict(processed_data)
+        # Prepare the input data in the same order as during model training
+        input_data = np.array([[
+            gross_approval,
+            sba_guaranteed_approval,
+            approval_fiscal_year,
+            initial_interest_rate,
+            term_in_months,
+            gross_chargeoff_amount,
+            revolver_status,
+            jobs_supported,
+            1 if fixed_or_variable_interest == 'Fixed' else 0,
+            1 if business_type_individual == 'Yes' else 0,
+            1 if business_type_partnership == 'Yes' else 0,
+            1 if sold_sec_market_ind == 'Yes' else 0
+        ]])
+        input_df = pd.DataFrame(input_data, columns=model_columns)
+        input_scaled = scaler.transform(input_df)
+        prediction = model.predict(input_scaled)
         result = prediction[0][0]
+        
         if result > 0.5:
-            st.success('The loan is likely to be paid back.')
+            st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('There is a high risk the loan will not be paid back.')
