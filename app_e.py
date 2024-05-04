@@ -29,7 +29,7 @@ logo_url = "https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSd
 
 st.markdown(f"""
     <div style="text-align: center;">
-        <img src="{logo_url}" alt="EmpowerLend.AI Logo" style="height: 80px; margin-top: 10px;">
+        <img src="photo.png" alt="EmpowerLend.AI Logo" style="height: 80px; margin-top: 10px;">
         <h1>EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
