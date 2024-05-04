@@ -28,7 +28,7 @@ model_columns = ['GrossApproval', 'SBAGuaranteedApproval', 'InitialInterestRate'
 # Setup Streamlit interface
 st.markdown("""
     <div style="text-align: center;">
-        <img src="https://drive.google.com/uc?export=view&id=1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF" alt="Logo" style="height: 100px;">
+        <img src="https://drive.google.com/file/d/1zOv_DjoL8a9aCFuZI32XlNSdMZd57ykF/view?usp=sharing" alt="Logo" style="height: 100px;">
         <h1 style="color: black; text-align: center;">EmpowerLend.AI</h1>
         <p style="color: grey; font-style: italic;">Empowering Women-Owned Small Businesses</p>
     </div>
