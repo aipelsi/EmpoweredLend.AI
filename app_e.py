@@ -36,15 +36,16 @@ image_base64 = convert_image_to_base64("photo.png")  # Adjust the path as necess
 # Custom CSS to style the app
 st.markdown("""
     <style>
-    body {
-        color: white;             # Set text color to white
-        background-color: black;  # Set background to black
+    body, html {
+        color: white !important;  # Ensures text is white
+        background-color: black !important;  # Ensures background is black
     }
-    .css-1v3fvcr {
-        background-color: black;  # Ensuring the main container also has a black background
+    .stTextInput, .stSelectbox, .stRadio, .stTextArea {
+        background-color: black;  # Input background
+        color: white;  # Input text color
     }
-    .css-1d391kg {
-        color: white;             # Ensuring text color inside form is white
+    .css-2trqyj {
+        color: white;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -87,4 +88,5 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
+
 
