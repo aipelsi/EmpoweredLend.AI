@@ -1,7 +1,7 @@
 streamlit==1.36.0
 pandas==2.2.2
 numpy==1.24.3  # Ensure this is below 2.0.0
-tensorflow==2.10.0
+tensorflow==2.14.1  # Use a compatible version for Python 3.11
 joblib==1.4.2
 gdown==5.2.0
 scikit-learn==1.5.0
