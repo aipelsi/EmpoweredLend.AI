@@ -37,13 +37,13 @@ image_base64 = convert_image_to_base64("photo.png")  # Adjust the path as necess
 st.markdown("""
     <style>
     body {
-        background-color: black;  # Set the general background to black
+        background-color: black;
     }
     .reportview-container .main .block-container {
-        background-color: white;  # Set the main content background to white
-        color: black;             # Ensure text is black
-        padding: 2rem;            # Optional: Adds some padding inside the main container
-        border-radius: 10px;      # Optional: Rounds the corners of the main container
+        background-color: white;
+        color: black;
+        padding: 2rem;
+        border-radius: 10px;
     }
     </style>
     """, unsafe_allow_html=True)
