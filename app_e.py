@@ -8,7 +8,7 @@ import joblib
 import base64
 
 # Define function to load resources
-@st.experimental_singleton
+@st.cache_resource
 def load_resources():
     model_url = 'https://drive.google.com/uc?id=1VPaz8JOudnGOwJw-IjhRYYSmk7SnHtDB'
     model_output = 'model.h5'
@@ -86,6 +86,7 @@ with st.form("loan_form"):
             st.success('Congratulations, you are approved! A representative will contact you shortly to assist you with your loan request.')
         else:
             st.error('We cannot approve your request at the moment. But we will reach out to help you navigate other options.')
+
 
 
 
