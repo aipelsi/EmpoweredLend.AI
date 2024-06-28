@@ -1,7 +1,7 @@
 streamlit
 pandas
 numpy
-tensorflow>=2.9
+tensorflow>=2.10.0
 joblib
 gdown
 scikit-learn
